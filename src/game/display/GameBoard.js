@@ -1,4 +1,4 @@
-import './css/board.css';
+import '../../css/game.css';
 
 import {useState, useEffect} from 'react';
 
@@ -14,9 +14,9 @@ function GameBoard({tiles, robot}) {
     );
 
     return (
-        <>
+        <div className="board">
             {tileDisplays}
-        </>
+        </div>
     );
 }
 

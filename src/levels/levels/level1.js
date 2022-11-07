@@ -1,6 +1,6 @@
-import { TileStates } from '../game/logic/enums/TileStates';
-import { ColorClasses } from '../game/logic/enums/ColorClasses';
-import { Directions } from '../game/logic/enums/Directions';
+import { TileStates } from '../../game/logic/enums/TileStates';
+import { ColorClasses } from '../../game/logic/enums/ColorClasses';
+import { Directions } from '../../game/logic/enums/Directions';
 
 const G = ColorClasses.Gray;
 const Z = ColorClasses.Green;
@@ -12,8 +12,9 @@ const S = TileStates.Source;
 const C = TileStates.Checker;
 const K = TileStates.Controller;
 
-export const level1Controllers = [Z, Y];
-export const level1Map = [
+const controllers = [Z, Y];
+const mapSize = 15;
+const map = [
     [ [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2] ],
     [ [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2] ],
     [ [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2] ],
@@ -30,4 +31,6 @@ export const level1Map = [
     [ [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2] ],
     [ [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2], [W, Y, 2] ]
 ];
-export const level1Robot = [Directions.Right, ColorClasses.Gray, ColorClasses.Gray, 10, 0];
+const robot = [Directions.Right, ColorClasses.Gray, ColorClasses.Gray, 10, 0];
+
+export const Level1 = {controllers: controllers, map: map, mapSize: mapSize, robot: robot};

@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { BlocklyWorkspace } from "react-blockly";
 import Blockly from "blockly";
 
-function Workspace({runCode}) {
+function Workspace({exportCodeObj}) {
     const [xml, setXml] = useState("");
     const [codeDto, setCodeDto] = useState("");
 
@@ -109,7 +109,7 @@ function Workspace({runCode}) {
                     onWorkspaceChange={workspaceDidChange}
                     onXmlChange={setXml}
                 />
-                <button onClick={() => runCode(JSON.parse(codeDto))}>RUN</button>
+                <button className="btn btn-success" onClick={() => exportCodeObj(JSON.parse(codeDto))}>Run</button>  
             </div>
             <pre id="generated-xml">{xml}</pre>
             <textarea
@@ -123,3 +123,5 @@ function Workspace({runCode}) {
 }
 
 export default Workspace;
+
+// <button onClick={() => exportCodeObj(JSON.parse(codeDto))}>RUN</button>

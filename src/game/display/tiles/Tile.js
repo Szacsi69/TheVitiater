@@ -1,4 +1,4 @@
-import '../css/tile.css';
+import '../../../css/game.css';
 import { motion } from "framer-motion/dist/framer-motion"
 
 export function Tile({displayImg, animate}) {

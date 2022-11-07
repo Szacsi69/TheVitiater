@@ -1,4 +1,4 @@
-import "./css/tile.css";
+import '../../css/game.css';
 import { ColorClasses } from '../logic/enums/ColorClasses';
 import { motion } from "framer-motion/dist/framer-motion"
 

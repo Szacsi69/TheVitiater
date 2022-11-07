@@ -1,4 +1,3 @@
-import { Directions } from '../game/logic/enums/Directions';
 import { TileStates } from '../game/logic/enums/TileStates';
 import { ColorClasses } from '../game/logic/enums/ColorClasses';
 import { PathTileLogic } from '../game/logic/tiles/PathTileLogic';
@@ -8,17 +7,21 @@ import { SourceTileLogic } from '../game/logic/tiles/SourceTileLogic';
 import { RobotLogic } from '../game/logic/RobotLogic';
 import { ControllerTileLogic } from '../game/logic/tiles/ControllerTileLogic';
 
-import {level1Controllers, level1Map, level1Robot} from './levels';
+import {Level1} from './levels/level1';
+import {Level2} from './levels/level2';
 
-export function generate_lvl1() {
-    return generate(level1Controllers, level1Map, level1Robot);
+export function levels() {
+    return [Level1, Level2];
 }
 
-function generate(lvlControllers, lvlMap, lvlRobot) {
+export function generate(level) {
+    var lvlControllers = level.controllers;
+    var lvlMap = level.map;
+    var lvlMxSize = level.mapSize;
+    var lvlRobot = level.robot
     var controllers = [];
     for(let i = 0; i < lvlControllers.length; i++)
         controllers.push(new ControllerTileLogic(lvlControllers[i]));
-    var lvlMxSize = 15;
     var levelMx = createMx(lvlMxSize);
     for(let i = 0; i < lvlMxSize; i++) {
         for(let j = 0; j < lvlMxSize; j++) {
@@ -53,7 +56,7 @@ function generate(lvlControllers, lvlMap, lvlRobot) {
     var robot = new RobotLogic(lvlRobot[0], lvlRobot[1], lvlRobot[2]);
     levelMx[lvlRobot[3]][lvlRobot[4]].placeRobot(robot);
 
-    return [levelMx, robot];
+    return {map: levelMx, robot: robot};
 }
 
 function createMx(lvlMxSize) {

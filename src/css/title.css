@@ -11,6 +11,10 @@
     border:10px solid black;
 }
 
+.start-div:hover {
+    background-color: #ee1313;
+}
+
 .robot-img {
     border:4px solid black;
     width: 10%;

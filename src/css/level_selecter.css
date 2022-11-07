@@ -1,0 +1,17 @@
+.level-select-box {
+    background-color: #878487;
+    border:10px solid black;
+}
+
+.level {
+    background-color: #262326; 
+    border:10px solid black;
+}
+
+.level:hover {
+    background-color: #ee1313;
+}
+
+.level-icon {
+    width: 30%;
+}

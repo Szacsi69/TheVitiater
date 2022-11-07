@@ -1,10 +1,8 @@
 import GameBoard from './display/GameBoard';
-import Workspace from '../code_generation/Workspace'
 
 import {useState, useEffect} from 'react';
-import { ExecutionController } from '../code_generation/logic/ExecutionController';
 
-function GameMaster({lvlCreate}) {
+function GameMaster({map, robotInit, exContr}) {
 
     const [tiles, setTiles] = useState(null)
     const [robot, setRobot] = useState(null)
@@ -12,13 +10,19 @@ function GameMaster({lvlCreate}) {
     const [executionController, setExecutionController] = useState(null)
 
     useEffect( () => {
-        var lvlComponents = lvlCreate();
-        var lvlMx = lvlComponents[0];
-        var robotInit = lvlComponents[1];
-        setTiles(lvlMx);
+        setTiles(map);
         setRobot(robotInit);
     },
-        [lvlCreate]
+        [map, robotInit]
+    );
+
+    useEffect( () => {
+        if (robot && exContr) {
+            exContr.updateConditionState(assembleConditionState());
+        }
+        setExecutionController(exContr);
+    },
+        [exContr]
     );
 
     useEffect( () => {
@@ -82,13 +86,6 @@ function GameMaster({lvlCreate}) {
         setRobot(robot.clone());
     }
 
-    function runScript(codeDto) {
-        var exContr = new ExecutionController();
-        exContr.generateCodeStructure(codeDto);
-        exContr.updateConditionState(assembleConditionState());
-        setExecutionController(exContr);
-    }
-
     function assembleConditionState() {
         var condState = {
             canTurnLeft: robot.canGoLeft(),
@@ -99,26 +96,21 @@ function GameMaster({lvlCreate}) {
     }
 
     return (
-        <div className="row">
-            <div className="col-6">
-                <Workspace runCode={runScript}/>
-            </div>
-            <div className="col-6">
-                { tiles && robot &&
-                <div className="board border border-dark border-4">
-                    <GameBoard tiles = {tiles} robot = {robot} />
-                </div>
-                }
-                
-                <button onClick={moveForward}>Move Forward</button>
-                <button onClick={turnLeft}>Turn Left</button>
-                <button onClick={turnRight}>Turn Right</button>
-                <button onClick={drain}>Drain</button>
-                <button onClick={camouflage}>Camouflage</button>
-                <button onClick={vitiate}>Vitiate</button>
-            </div>
+        <div>
+            { tiles && robot &&
+            <GameBoard tiles = {tiles} robot = {robot} />
+            }
         </div>
     );
 }
 
 export default GameMaster;
+
+/**
+ *  <button onClick={moveForward}>Move Forward</button>
+    <button onClick={turnLeft}>Turn Left</button>
+    <button onClick={turnRight}>Turn Right</button>
+    <button onClick={drain}>Drain</button>
+    <button onClick={camouflage}>Camouflage</button>
+    <button onClick={vitiate}>Vitiate</button>
+ */
