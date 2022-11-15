@@ -45,7 +45,6 @@ export class RobotLogic {
     }
 
     turnLeft() {
-        this.prevDir = this.dir;
         if (this.dir > 0)
             this.dir = this.dir - 1;
         else 
@@ -53,11 +52,17 @@ export class RobotLogic {
     }
 
     turnRight() {
-        this.prevDir = this.dir;
         if (this.dir < 3)
             this.dir = this.dir + 1;
         else
             this.dir = 0;
+    }
+
+    turnAround() {
+        if (this.dir < 2)
+            this.dir += 2;
+        else
+            this.dir -= 2;
     }
 
     drain() {

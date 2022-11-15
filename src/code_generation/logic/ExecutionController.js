@@ -3,7 +3,8 @@ import { LoopExecuter } from "./executers/LoopExecuter";
 import { SelectionExecuter } from "./executers/SelectionExecuter";
 import { CanTurnLeftAsserter } from "./condition_asserters/CanTurnLeftAsserter";
 import { CanTurnRightAsserter } from "./condition_asserters/CanTurnRightAsserter";
-import { CurrentTileAsserter } from "./condition_asserters/CurrentTileAsserter";
+import { GoalTileStateAsserter } from "./condition_asserters/GoalTileStateAsserter";
+import { GoalTileColorAsserter } from "./condition_asserters/GoalTileColorAsserter";
 
 export class ExecutionController {
     constructor(codeStack = []) {
@@ -19,56 +20,68 @@ export class ExecutionController {
         }
         catch (err) {
             this.codeStack = [];
-            this.codeStack.push(new CommandExecuter(`console.log(${err});`));
+            this.codeStack.push(new CommandExecuter(`finishGame(false, "Error: ${err}");`, []));
         }
     }
 
     dtoToCode(dto) {
-        var condAsserter = null;
         var codeStack = [];
         if (dto.type === "command")
-            return new CommandExecuter(dto.content);
+            return new CommandExecuter(dto.content, []);
         if (dto.type === "selection") {
-            if (dto.condition === "not_set")
-                throw '"One of the blocks has no condition when it should."';
-            switch (dto.condition.cond) {
-                case "canTurnLeft":
-                    condAsserter = new CanTurnLeftAsserter();
-                    break;
-                case "canTurnRight":
-                    condAsserter = new CanTurnRightAsserter();
-                    break;
-                case "currentTile":
-                    condAsserter = new CurrentTileAsserter(dto.condition.value);
-                    break;
-                default:
-                    break;
+            var conditionAsserters = [];
+            if (dto.conditions.length === 0)
+                throw 'One of the blocks has no condition when it should.';
+            for (let i = 0; i < dto.conditions.length; i++) {
+                switch (dto.conditions[i].cond) {
+                    case "canTurnLeft":
+                        conditionAsserters.push(new CanTurnLeftAsserter());
+                        break;
+                    case "canTurnRight":
+                        conditionAsserters.push(new CanTurnRightAsserter());
+                        break;
+                    case "goalTileState":
+                        conditionAsserters.push(new GoalTileStateAsserter(dto.conditions[i].value));
+                        break;
+                    case "goalTileColor":
+                        conditionAsserters.push(new GoalTileColorAsserter(dto.conditions[i].value));
+                        break;
+                    default:
+                        break;
+                }
             }
             for(let i = dto.content.length - 1; i >= 0; i--) {
                 codeStack.push(this.dtoToCode(dto.content[i]));
             }
-            return new SelectionExecuter(codeStack, condAsserter)
+
+            return new SelectionExecuter(codeStack, conditionAsserters)
         }
         if (dto.type === "loop") {
-            if (dto.condition === "not_set")
-                throw '"One of the blocks has no condition when it should."';            
-            switch (dto.condition.cond) {
-                case "currentTile":
-                    condAsserter = new CurrentTileAsserter(dto.condition.value);
-                    break;
-                default:
-                    break;
+            var conditionAsserters = [];
+            if (dto.conditions.length === 0)
+                throw 'One of the blocks has no condition when it should.';            
+            for (let i = 0; i < dto.conditions.length; i++) {
+                switch (dto.conditions[i].cond) {
+                    case "goalTileState":
+                        conditionAsserters.push(new GoalTileStateAsserter(dto.conditions[i].value));
+                        break;
+                    case "goalTileColor":
+                        conditionAsserters.push(new GoalTileColorAsserter(dto.conditions[i].value));
+                        break;
+                    default:
+                        break;
+                }
             }
             for(let i = dto.content.length - 1; i >= 0; i--) {
                 codeStack.push(this.dtoToCode(dto.content[i]));
             }
-            return new LoopExecuter(codeStack, condAsserter)
+            return new LoopExecuter(codeStack, conditionAsserters)
         }
     }
 
     updateConditionState(conditionState) {
         for(let i = 0; i < this.codeStack.length; i++)
-            this.codeStack[i].updateCond(conditionState); 
+            this.codeStack[i].updateCond(conditionState);
     }
 
     execute() {
@@ -77,11 +90,11 @@ export class ExecutionController {
             if (result[0]) {
                 this.codeStack.pop();
             }
-            return result[1];
+            return {command: result[1], delayRequired: result[2]};
         }
         catch (err) {
             this.codeStack = [];
-            return `console.log("${err}");`
+            return {command: `finishGame(false, "Error: ${err}");`, delayRequired: false};
         }
     }
 

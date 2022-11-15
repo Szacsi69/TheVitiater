@@ -1,10 +1,9 @@
 import { BaseExecuter } from "./BaseExecuter";
 
 export class LoopExecuter extends BaseExecuter {
-    constructor(codeStack, condAsserter, looptrap = 20) {
-        super(codeStack);
+    constructor(codeStack, conditionAsserters, looptrap = 20) {
+        super(codeStack, conditionAsserters);
         this.codeStackSave = this.cloneCodeStack(codeStack);
-        this.condAsserter = condAsserter;
         this.cond = false;
         this.shouldCheckCond = true;
         this.condSuccess = false;
@@ -12,7 +11,10 @@ export class LoopExecuter extends BaseExecuter {
     }
 
     updateCond(conditionState) {
-        this.cond = !this.condAsserter.assert(conditionState);
+        this.cond = false;
+        for (let i = 0; i < this.conditionAsserters.length; i++) {
+            this.cond = this.cond || !this.conditionAsserters[i].assert(conditionState);
+        }
         for(let i = 0; i < this.codeStack.length; i ++)
             this.codeStack[i].updateCond(conditionState);
     }
@@ -24,7 +26,7 @@ export class LoopExecuter extends BaseExecuter {
 
     execute() {
         if (this.codeStack.length === 0)
-            return [true, "console.log('No commands in loop.');"];
+            return [true, "console.log('No commands in loop.'); idle();", false];
         if (this.shouldCheckCond)
             this.checkCond();
         if(this.condSuccess) {
@@ -32,20 +34,20 @@ export class LoopExecuter extends BaseExecuter {
             if (result[0]) {
                 this.codeStack.pop();
                 if (this.codeStack.length === 0) {
-                    if (this.looptrap === 0) throw "Infinite loop occured in the code.";
+                    if (this.looptrap === 0) throw 'Infinite loop occured in the code.';
                     this.looptrap--;
                     this.shouldCheckCond = true;
                     this.codeStack = this.cloneCodeStack(this.codeStackSave);
-                    return [false, result[1]];
+                    return [false, result[1], result[2]];
                 }
                 else 
-                    return [false, result[1]];
+                    return [false, result[1], result[2]];
             }
             else 
-                return [false, result[1]];
+                return [false, result[1], result[2]];
         }
         else {
-            return [true, "console.log('Loop condition is not true.'); idle();"];
+            return [true, "console.log('Loop condition is not true.'); idle();", false];
         }
     }
 
@@ -62,6 +64,6 @@ export class LoopExecuter extends BaseExecuter {
         for(let i = this.codeStack.length - 1; i >= 0; i--) {
             copyStack.push(this.codeStack[i].clone());
         }
-        return new LoopExecuter(copyStack, this.condAsserter, this.looptrap);
+        return new LoopExecuter(copyStack, this.conditionAsserters, this.looptrap);
     }
 }

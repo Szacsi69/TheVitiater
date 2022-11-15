@@ -1,11 +1,14 @@
 import GameBoard from './display/GameBoard';
 
 import {useState, useEffect} from 'react';
+import { ColorClasses } from './logic/enums/ColorClasses';
 
-function GameMaster({map, robotInit, exContr}) {
+function GameMaster({map, robotInit, exContr, stepSpeed, gameOver}) {
 
-    const [tiles, setTiles] = useState(null)
-    const [robot, setRobot] = useState(null)
+    const [tiles, setTiles] = useState(null);
+    const [robot, setRobot] = useState(null);
+    
+    const [speed, setSpeed] = useState(1000);
 
     const [executionController, setExecutionController] = useState(null)
 
@@ -14,6 +17,11 @@ function GameMaster({map, robotInit, exContr}) {
         setRobot(robotInit);
     },
         [map, robotInit]
+    );
+    useEffect( () => {
+        setSpeed(stepSpeed)
+    },
+        [stepSpeed]
     );
 
     useEffect( () => {
@@ -27,8 +35,11 @@ function GameMaster({map, robotInit, exContr}) {
 
     useEffect( () => {
         if (executionController && executionController.hasCode()) {
-            var command = executionController.execute();
-            eval(command);
+            var commandObj = executionController.execute();
+            if (commandObj.delayRequired)
+                setTimeout(runCommand, speed, commandObj.command);
+            else
+                runCommand(commandObj.command);
         }
     },
         [executionController]
@@ -41,17 +52,49 @@ function GameMaster({map, robotInit, exContr}) {
                 exContr.updateConditionState(assembleConditionState());
                 setExecutionController(exContr);
             }
+            else {
+                var success = checkWin();
+                if (success) {
+                    finishGame(true, "");
+                }
+                else {
+                    finishGame(false, "There are still unvitiated fields.")
+                }
+            }
         }
     },
         [robot]
     );
+
+    function runCommand(command) {
+        eval(command);
+    }
+
+    function checkWin() {
+        var success = true;
+        for (let i = 0; i < tiles.length; i++) {
+            for (let j = 0; j < tiles[i].length; j++) {
+                if (tiles[i][j].getColor() !== ColorClasses.Gray) {
+                    success = false;
+                    break;
+                }
+            }
+            if (!success) break;
+        }
+        return success;
+    }
+
+    function finishGame(success, reason) {
+        setExecutionController(null);
+        gameOver(success, reason);
+    }
     
     function moveForward() {    
         var result = robot.moveForward();
         if (result[0])
             setRobot(robot.clone());
         else
-            alert(result[1]);
+            finishGame(false, result[1]);
     }
 
     function turnLeft() {
@@ -61,6 +104,11 @@ function GameMaster({map, robotInit, exContr}) {
 
     function turnRight() {
         robot.turnRight();
+        setRobot(robot.clone());
+    }
+
+    function turnAround() {
+        robot.turnAround();
         setRobot(robot.clone());
     }
 
@@ -90,7 +138,8 @@ function GameMaster({map, robotInit, exContr}) {
         var condState = {
             canTurnLeft: robot.canGoLeft(),
             canTurnRight: robot.canGoRight(),
-            currentTile: robot.getLocation().getState()
+            currentTileState: robot.getLocation().getState(),
+            currentTileColor: robot.getLocation().getColor()
         }
         return condState;
     }

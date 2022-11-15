@@ -1,9 +1,9 @@
 
-export class CurrentTileAsserter {
+export class GoalTileStateAsserter {
     constructor(condTileState) {
         this.condTileState = condTileState;
     }
     assert(conditionState) {
-        return conditionState.currentTile === this.condTileState;
+        return conditionState.currentTileState === this.condTileState;
     }
 }

@@ -56,7 +56,7 @@ export function generate(level) {
     var robot = new RobotLogic(lvlRobot[0], lvlRobot[1], lvlRobot[2]);
     levelMx[lvlRobot[3]][lvlRobot[4]].placeRobot(robot);
 
-    return {map: levelMx, robot: robot};
+    return {map: levelMx, robot: robot, description: level.description};
 }
 
 function createMx(lvlMxSize) {
