@@ -1,12 +1,11 @@
 import '../css/base.css';
 import logoImg from '../img/page_assets/title.png';
 
-import Workspace from '../code_generation/Workspace';
+import Workspace from '../blockly/Workspace';
 import GameMaster from '../game/GameMaster';
-import { ExecutionController } from '../code_generation/logic/ExecutionController';
+import { ExecutionController } from '../interpreter/ExecutionController';
 
-import {levels} from '../levels/level_generator';
-import {generate} from '../levels/level_generator';
+import {aquire_level} from '../levels/level_generator';
 
 import { Link, Navigate } from 'react-router-dom';
 import {useState, useEffect} from 'react';
@@ -14,21 +13,27 @@ import {useParams} from 'react-router-dom';
 
 export function GamePage() {
     const { lvlNum } = useParams();
+    
     const [level, setLevel] = useState(null);
     const [executionController, setExecutionController] = useState(null);
     const [gameSpeed, setGameSpeed] = useState(1000);
+    
+
     const [permitRun, setPermitRun] = useState(true);
     const [permitStartOver, setPermitStartOver] = useState(false);
+
     const [levelDescription, setLevelDescription] = useState(null);
+    const [maxBlockLimit, setMaxBlockLimit] = useState(0);
+    const [remainingBlocks, setRemainingBlocks] = useState(-1);
     const [over, setOver] = useState(null);
 
     const [goBack, setGoBack] = useState(false);
 
     useEffect( () => {
-        var lvl = levels()[lvlNum - 1];
-        lvl = generate(lvl);
+        var lvl = aquire_level(lvlNum - 1);
         setLevel(lvl);
         setLevelDescription(lvl.description);
+        setMaxBlockLimit(lvl.maxBlockLimit);
     },
         []
     );
@@ -46,8 +51,7 @@ export function GamePage() {
     }
 
     function startLevelOver() {
-        var lvl = levels()[lvlNum - 1];
-        lvl = generate(lvl);
+        var lvl = aquire_level(lvlNum - 1);
         setLevel(lvl);
         setExecutionController(null);
         setPermitRun(true);
@@ -82,7 +86,7 @@ export function GamePage() {
             </div>
             <div className="row d-flex justify-content-between">
                 <div className="col-5">
-                    <Workspace exportCodeObj={createExecutionController} permitRun={permitRun}/>
+                    <Workspace maxBlockLimit={maxBlockLimit} exportCapacity={setRemainingBlocks} exportCodeObj={createExecutionController} permitRun={permitRun}/>
                 </div>
                 
                 <div className="col-2 d-flex flex-column justify-content-between">
@@ -91,6 +95,9 @@ export function GamePage() {
                         <div>
                             <p className="text-center fw-bold text-decoration-underline text-white">{levelDescription.title}</p>
                             <p className="text-center text-white">{levelDescription.details}</p>
+                            { remainingBlocks >= 0 &&
+                            <p className="text-center text-white"> You have <span className="fw-bold text-white">{remainingBlocks}</span> blocks left.</p>
+                            }
                         </div>
                         }
                         { over && over.success &&
@@ -108,6 +115,7 @@ export function GamePage() {
                         </div>
                         }
                     </div>
+                    { level && levelDescription && remainingBlocks >= 0 &&
                     <div className="flex-column bg-secondary border border-2 p-2">
                         <p className="text-center bg-dark text-light border border-1">Speed: <span className="fw-bold">{gameSpeed === 1000 ? "Normal" : "Fast"}</span></p>
                         <div className="row">
@@ -119,6 +127,7 @@ export function GamePage() {
                             </div>
                         </div>
                     </div>
+                    }
                 </div>
                 <div className="col-5 d-flex justify-content-end">
                     { level &&

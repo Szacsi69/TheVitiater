@@ -7,8 +7,16 @@ import React, { useState, useEffect } from "react";
 import { BlocklyWorkspace } from "react-blockly";
 import Blockly from "blockly";
 
-function Workspace({exportCodeObj, permitRun}) {
+import { SaveModal } from "./modals/SaveModal";
+import { LoadModal } from "./modals/LoadModal";
+
+function Workspace({maxBlockLimit, exportCapacity, exportCodeObj, permitRun}) {
+    const [showSaveModal, setShowSaveModal] = useState(false);
+    const [showLoadModal, setShowLoadModal] = useState(false);
+
     const [xml, setXml] = useState("");
+    const [blockLimit, setBlockLimit] = useState(0);
+    const [capacity, setCapacity] = useState(0);
     const [emptyWorkSpace, setEmptyWorkSpace] = useState(true);
     const [codeDto, setCodeDto] = useState("");
 
@@ -102,33 +110,72 @@ function Workspace({exportCodeObj, permitRun}) {
         }
         ],
     };
+
+    useEffect(() => {
+        setBlockLimit(maxBlockLimit);
+    },
+        [maxBlockLimit]
+    );
+
+    useEffect(() => {
+        exportCapacity(capacity)
+    },
+        [capacity]
+    );
+
     function workspaceDidChange(workspace) {
-        if (workspace.getAllBlocks(false).length > 0) {
+        if (workspace.getAllBlocks(false).length > 0)
             setEmptyWorkSpace(false);
-        }
         else
             setEmptyWorkSpace(true);
+        setCapacity(workspace.remainingCapacity());
+
         var newCodeDto = Blockly.JavaScript.workspaceToCode(workspace);
         newCodeDto = newCodeDto.slice(0, -2)
         newCodeDto = '{"code": [' + newCodeDto + ']}';
         setCodeDto(newCodeDto);
     }
 
+    function closeSaveModal() {
+        setShowSaveModal(false);
+    }
+
+    function closeLoadModal() {
+        setShowLoadModal(false);
+    }
+
+    function loadXml(loadXml) {
+        setShowLoadModal(false);
+        var dom = Blockly.Xml.textToDom(loadXml);
+        Blockly.mainWorkspace.clear();
+        Blockly.Xml.domToWorkspace(dom, Blockly.mainWorkspace, );
+    }
+
     return (
-        <>
-            <div className="row">
+        <>  
+            { blockLimit &&
+            <div>
                 <BlocklyWorkspace
                     toolboxConfiguration={toolboxCategories}
                     initialXml={initialXml}
                     className="workspace"
                     workspaceConfiguration={{
                         scrollbars: true,
+                        maxBlocks: blockLimit,
+                        trashcan: true
                     }}
                     onWorkspaceChange={workspaceDidChange}
                     onXmlChange={setXml}
                 />
-                <button className="btn btn-success" disabled={!permitRun || emptyWorkSpace} onClick={() => exportCodeObj(JSON.parse(codeDto))}>Run</button>  
+                <div className="btn-group col-12">
+                    <button type="button" className="btn btn-secondary btn-block" disabled={emptyWorkSpace} onClick={() => setShowSaveModal(true)}>Save</button>
+                    <button type="button" className="btn btn-success btn-block" disabled={!permitRun || emptyWorkSpace} onClick={() => exportCodeObj(JSON.parse(codeDto))}>Run</button>
+                    <button type="button" className="btn btn-secondary btn-block"  onClick={() => setShowLoadModal(true)}>Load</button>
+                </div>
             </div>
+            }
+           <SaveModal show={showSaveModal} xml={xml} exit={closeSaveModal} />
+           <LoadModal show={showLoadModal} load={loadXml} exit={closeLoadModal} />
         </>
     );
 }

@@ -7,14 +7,19 @@ import { SourceTileLogic } from '../game/logic/tiles/SourceTileLogic';
 import { RobotLogic } from '../game/logic/RobotLogic';
 import { ControllerTileLogic } from '../game/logic/tiles/ControllerTileLogic';
 
-import {Level1} from './levels/level1';
-import {Level2} from './levels/level2';
+import {Level1} from './level_descriptions/level1';
+import {Level2} from './level_descriptions/level2';
 
-export function levels() {
+export function aquire_level(lvlIdx) {
+    var lvl = levels()[lvlIdx];
+    return generate(lvl);
+}
+
+function levels() {
     return [Level1, Level2];
 }
 
-export function generate(level) {
+function generate(level) {
     var lvlControllers = level.controllers;
     var lvlMap = level.map;
     var lvlMxSize = level.mapSize;
@@ -56,7 +61,7 @@ export function generate(level) {
     var robot = new RobotLogic(lvlRobot[0], lvlRobot[1], lvlRobot[2]);
     levelMx[lvlRobot[3]][lvlRobot[4]].placeRobot(robot);
 
-    return {map: levelMx, robot: robot, description: level.description};
+    return {map: levelMx, robot: robot, description: level.description, maxBlockLimit: level.maxBlockLimit};
 }
 
 function createMx(lvlMxSize) {

@@ -33,4 +33,8 @@ const map = [
 ];
 const robot = [Directions.Right, ColorClasses.Gray, ColorClasses.Gray, 5, 0];
 
-export const Level2 = {controllers: controllers, map: map, mapSize: mapSize, robot: robot};
+const description = {title: "Objective", details: "Vitiate all of the fields in the level, turning them gray!"}
+
+const maxBlockLimit = 20
+
+export const Level2 = {controllers: controllers, map: map, mapSize: mapSize, robot: robot, description, maxBlockLimit: maxBlockLimit};
