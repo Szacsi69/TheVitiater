@@ -7,7 +7,7 @@ export class CommandExecuter extends BaseExecuter {
     }
 
     execute() {
-        return [true, this.codeStack, true];
+        return {noMoreToExecute: true, toExecute: this.codeStack, shouldDelay: true};
     }
 
     clone() {

@@ -83,11 +83,6 @@ function GameMaster({map, robotInit, exContr, stepSpeed, gameOver}) {
         }
         return success;
     }
-
-    function finishGame(success, reason) {
-        setExecutionController(null);
-        gameOver(success, reason);
-    }
     
     function moveForward() {    
         var result = robot.moveForward();
@@ -132,6 +127,11 @@ function GameMaster({map, robotInit, exContr, stepSpeed, gameOver}) {
 
     function idle() {
         setRobot(robot.clone());
+    }
+
+    function finishGame(success, reason) {
+        setExecutionController(null);
+        gameOver(success, reason);
     }
 
     function assembleConditionState() {

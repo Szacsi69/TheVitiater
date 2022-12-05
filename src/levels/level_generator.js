@@ -9,6 +9,11 @@ import { ControllerTileLogic } from '../game/logic/tiles/ControllerTileLogic';
 
 import {Level1} from './level_descriptions/level1';
 import {Level2} from './level_descriptions/level2';
+import {Level3} from './level_descriptions/level3';
+import {Level4} from './level_descriptions/level4';
+import {Level5} from './level_descriptions/level5';
+import {Level6} from './level_descriptions/level6';
+import {Level7} from './level_descriptions/level7';
 
 export function aquire_level(lvlIdx) {
     var lvl = levels()[lvlIdx];
@@ -16,7 +21,7 @@ export function aquire_level(lvlIdx) {
 }
 
 function levels() {
-    return [Level1, Level2];
+    return [Level1, Level2, Level3, Level4, Level5, Level6, Level7];
 }
 
 function generate(level) {
@@ -58,8 +63,8 @@ function generate(level) {
 
     createNeighbourhood(levelMx, lvlMxSize);
 
-    var robot = new RobotLogic(lvlRobot[0], lvlRobot[1], lvlRobot[2]);
-    levelMx[lvlRobot[3]][lvlRobot[4]].placeRobot(robot);
+    var robot = new RobotLogic(lvlRobot.direction, lvlRobot.innerColor, lvlRobot.outerColor);
+    levelMx[lvlRobot.posRow][lvlRobot.posColumn].placeRobot(robot);
 
     return {map: levelMx, robot: robot, description: level.description, maxBlockLimit: level.maxBlockLimit};
 }

@@ -5,7 +5,7 @@ import { SourceTile } from "../../display/tiles/SourceTile"
 
 export class SourceTileLogic extends TileLogic {
     constructor(color, controller) {
-        super(TileStates.Wall, color, controller);
+        super(TileStates.Source, color, controller);
     }
 
     gotDrained() {

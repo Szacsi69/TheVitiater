@@ -162,7 +162,10 @@ function Workspace({maxBlockLimit, exportCapacity, exportCodeObj, permitRun}) {
                     workspaceConfiguration={{
                         scrollbars: true,
                         maxBlocks: blockLimit,
-                        trashcan: true
+                        trashcan: true,
+                        maxInstances: {
+                            ["move"]: 5,
+                        }
                     }}
                     onWorkspaceChange={workspaceDidChange}
                     onXmlChange={setXml}

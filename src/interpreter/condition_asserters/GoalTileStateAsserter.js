@@ -1,9 +1,10 @@
+import { BaseAsserter } from "./BaseAsserter";
 
-export class GoalTileStateAsserter {
-    constructor(condTileState) {
-        this.condTileState = condTileState;
+export class GoalTileStateAsserter extends BaseAsserter {
+    constructor(condValue) {
+        super(condValue)
     }
     assert(conditionState) {
-        return conditionState.currentTileState === this.condTileState;
+        return conditionState.currentTileState === this.condValue;
     }
 }

@@ -87,10 +87,10 @@ export class ExecutionController {
     execute() {
         try {
             var result = this.codeStack[this.codeStack.length - 1].execute();
-            if (result[0]) {
+            if (result.noMoreToExecute) {
                 this.codeStack.pop();
             }
-            return {command: result[1], delayRequired: result[2]};
+            return {command: result.toExecute, delayRequired: result.shouldDelay};
         }
         catch (err) {
             this.codeStack = [];

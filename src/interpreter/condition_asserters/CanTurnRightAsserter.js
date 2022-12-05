@@ -1,5 +1,6 @@
+import { BaseAsserter } from "./BaseAsserter";
 
-export class CanTurnRightAsserter {
+export class CanTurnRightAsserter extends BaseAsserter {
     assert(conditionPack) {
         return conditionPack.canTurnRight;
     }

@@ -12,6 +12,11 @@
     background-color: #ee1313;
 }
 
-.level-icon {
-    width: 30%;
+.title {
+    width: 100%;
+}
+
+.decor-img {
+    border:5px solid black;
+    width: 60%;
 }

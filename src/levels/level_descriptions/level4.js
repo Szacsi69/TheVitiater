@@ -22,19 +22,19 @@ const map = [
     [ [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1] ],
     [ [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1] ],
     [ [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1] ],
-    [ [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [P, Z, 1], [P, Z, 1], [P, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1] ],
+    [ [P, Z, 1], [P, Z, 1], [P, Z, 1], [P, Z, 1], [P, Z, 1], [P, Z, 1], [P, Z, 1], [P, Z, 1], [P, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1] ],
     [ [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [P, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1] ],
-    [ [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [K, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1] ],
+    [ [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [K, Z, 1], [P, Z, 1], [P, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1] ],
     [ [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1] ],
     [ [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1] ],
     [ [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1] ],
     [ [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1] ],
     [ [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1], [W, Z, 1] ]
 ];
-const robot = { direction: Directions.Right, innerColor: ColorClasses.Gray, outerColor: ColorClasses.Gray, posRow: 7, posColumn: 6};
+const robot = { direction: Directions.Right, innerColor: ColorClasses.Gray, outerColor: ColorClasses.Gray, posRow: 7, posColumn: 0};
 
 const description = {title: "Objective", details: "Vitiate all of the fields in the level, turning them gray!"}
 
-const maxBlockLimit = 6;
+const maxBlockLimit = 7;
 
-export const Level2 = {controllers: controllers, map: map, mapSize: mapSize, robot: robot, description: description, maxBlockLimit: maxBlockLimit};
+export const Level4 = {controllers: controllers, map: map, mapSize: mapSize, robot: robot, description: description, maxBlockLimit: maxBlockLimit};

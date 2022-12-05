@@ -1,9 +1,10 @@
+import { BaseAsserter } from "./BaseAsserter";
 
-export class GoalTileColorAsserter {
-    constructor(condTileColor) {
-        this.condTileColor = condTileColor;
+export class GoalTileColorAsserter extends BaseAsserter {
+    constructor(condValue) {
+        super(condValue)
     }
     assert(conditionState) {
-        return conditionState.currentTileColor === this.condTileColor;
+        return conditionState.currentTileColor === this.condValue;
     }
 }

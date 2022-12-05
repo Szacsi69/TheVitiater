@@ -30,7 +30,7 @@ Blockly.JavaScript['yellow_color_input'] = function(block) {
 
 Blockly.JavaScript['move'] = function(block) {
     var content = '"moveForward();"'
-    var codeDto = `{ "type": "command", "content": ${content} }, `;
+    var codeDto = `{ "type": "command", "conditions": [], "content": ${content} }, `;
     return codeDto;
 };
 
@@ -43,7 +43,7 @@ Blockly.JavaScript['turn'] = function(block) {
         content = '"turnRight();"';
     else if (dropdown_direction === "around")
         content = '"turnAround();"';
-    var codeDto = `{ "type": "command", "content": ${content} }, `;
+    var codeDto = `{ "type": "command", "conditions": [], "content": ${content} }, `;
     return codeDto;
 };
 
@@ -61,7 +61,7 @@ Blockly.JavaScript['camouflage'] = function(block) {
 
 Blockly.JavaScript['vitiate'] = function(block) {
     var content = '"vitiate();"'
-    var codeDto = `{ "type": "command", "content": ${content} }, `;
+    var codeDto = `{ "type": "command", "conditions": [], "content": ${content} }, `;
     return codeDto;
 };
 
